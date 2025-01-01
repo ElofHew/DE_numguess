@@ -17,116 +17,123 @@
 
 # v2.2版本更新内容：
 # 1. 修复已知BUG
+# 2. 优化了游戏提示信息
+# 3. 整合游戏代码块
 
 import random
 import time
 import sys
 
-def start_game():
+def display_menu():
+    print("\n请选择范围：")
+    time.sleep(0.2)
+    print("1 > 入门(0~50)")
+    print("2 > 较少(0~100)")
+    print("3 > 正常(0~200)")
+    print("4 > 较多(0~500)")
+    print("5 > 很多(0~1000)")
+    print("0 > 手动选择范围")
+    time.sleep(0.2)
+
+def choose_difficulty(diff):
+    if diff == 1:
+        return random.randint(0, 50), 0, 50
+    elif diff == 2:
+        return random.randint(0, 100), 0, 100
+    elif diff == 3:
+        return random.randint(0, 200), 0, 200
+    elif diff == 4:
+        return random.randint(0, 500), 0, 500
+    elif diff == 5:
+        return random.randint(0, 1000), 0, 1000
+    else:
+        return None, None, None
+
+def get_manual_range():
     while True:
         try:
-            print("请选择范围：")
-            time.sleep(0.2)
-            print("1 > 入门(0~50)")
-            print("2 > 较少(0~100)")
-            print("3 > 正常(0~200)")
-            print("4 > 较多(0~500)")
-            print("5 > 很多(0~1000)")
-            print("0 > 手动选择范围")
-            time.sleep(0.2)
-            while True:
-                try:
-                    diff = input("> ")
-                    if int(diff) == 1:
-                        rdm = random.randint(0, 50)
-                        frsrt = 0
-                        frend = 50
-                    elif int(diff) == 2:
-                        rdm = random.randint(0, 100)
-                        frsrt = 0
-                        frend = 100
-                    elif int(diff) == 3:
-                        rdm = random.randint(0, 200)
-                        frsrt = 0
-                        frend = 200
-                    elif int(diff) == 4:
-                        rdm = random.randint(0, 500)
-                        frsrt = 0
-                        frend = 500
-                    elif int(diff) == 5:
-                        rdm = random.randint(0, 1000)
-                        frsrt = 0
-                        frend = 1000
-                    elif int(diff) == 0:
-                        while True:
-                            try:
-                                frsrt = int(input("请输入范围最小数字："))
-                                frend = int(input("请输入范围最大数字："))
-                                if frsrt > frend:
-                                    print("错误！(最小数不能大于最大数)")
-                                    continue
-                                elif frsrt == frend:
-                                    print("错误！(最小数不能等于最大数)")
-                                    continue
-                                else:
-                                    rdm = random.randint(frsrt, frend)
-                                    print("当前范围是：", frsrt, "~", frend)
-                                    time.sleep(0.5)
-                                    print("即将开始游戏！")
-                                    break
-                            except:
-                                print("错误！(输入有误)")
-                                continue
-                    else:
-                        print("你的输入有误！")
-                        continue
-                    time.sleep(1)
-                    print("游戏开始！"
-                          "(提示：范围是", frsrt, "~", frend, ")")
-                    time.sleep(0.5)
-                    while True:
-                        try:
-                            inn = int(input("> "))
-                            if inn < rdm:
-                                print("你猜小了！")
-                            elif inn > rdm:
-                                print("你猜大了！")
-                            elif inn == rdm:
-                                print("你猜对了！")
-                                print("恭喜你赢得了本次游戏！")
-                                time.sleep(1)
-                                while True:
-                                    try:
-                                        print("\n===结束菜单===")
-                                        print("1 > 重新开始游戏")
-                                        print("2 > 退出游戏")
-                                        rsult = input("> ")
-                                        if int(rsult) == 1:
-                                            time.sleep(1)
-                                            return start_game()
-                                        elif int(rsult) == 2:
-                                            print("\n再见！")
-                                            print("(程序将在3秒后退出)")
-                                            time.sleep(3)
-                                            sys.exit()
-                                        else:
-                                            print("你的输入有误！")
-                                    except ValueError:
-                                        print("你的输入有误！")
-                                break
-                            else:
-                                print("你的输入有误！") 
-                        except ValueError:
-                            print("你的输入有误！")
-                except ValueError:  
-                    print("你的输入有误！") 
+            frsrt = int(input("请输入范围最小数字："))
+            frend = int(input("请输入范围最大数字："))
+            if frsrt > frend:
+                print("错误！(最小数不能大于最大数)")
+                continue
+            elif frsrt == frend:
+                print("错误！(最小数不能等于最大数)")
+                continue
+            else:
+                return frsrt, frend
+        except ValueError:
+            print("错误！(输入有误)")
+            continue
+
+def play_game(rdm, frsrt, frend):
+    print("游戏开始！(提示：范围是", frsrt, "~", frend, ")")
+    time.sleep(0.5)
+    while True:
+        try:
+            inn = int(input("> "))
+            if inn < rdm:
+                print("你猜小了！")
+            elif inn > rdm:
+                print("你猜大了！")
+            elif inn == rdm:
+                print("你猜对了！")
+                print("恭喜你赢得了本次游戏！")
+                time.sleep(0.5)
+                return True
         except ValueError:
             print("你的输入有误！")
+
+def end_game_menu():
+    while True:
+        try:
+            print("\n===结束菜单===")
+            print("1 > 重新开始游戏")
+            print("2 > 退出游戏")
+            rsult = int(input("> "))
+            if rsult == 1:
+                time.sleep(0.5)
+                return True
+            elif rsult == 2:
+                print("\n再见！")
+                print("(程序将在3秒后退出)")
+                time.sleep(3)
+                sys.exit()
+            else:
+                print("你的输入有误！")
+        except ValueError:
+            print("你的输入有误！")
+
+def start_game():
+    while True:
+        display_menu()
+        while True:
+            try:
+                diff = int(input("> "))
+                if diff == 0:
+                    frsrt, frend = get_manual_range()
+                    rdm = random.randint(frsrt, frend)
+                    print("当前范围是：", frsrt, "~", frend)
+                    time.sleep(0.5)
+                else:
+                    rdm, frsrt, frend = choose_difficulty(diff)
+                    if rdm is None:
+                        print("你的输入有误！")
+                        continue
+
+                if play_game(rdm, frsrt, frend):
+                    if end_game_menu():
+                        break
+            except ValueError:
+                print("你的输入有误！")
+
 
 
 print("====================\n"
       "    猜数字小游戏\n"
-      "====================\n")
+      "====================\n"
+      "作者主站：https://www.drevan.xyz\n"
+      "新年快乐！更新时间：2025-01-01\n")
 time.sleep(0.5)
 while True:
     try:
@@ -155,9 +162,6 @@ while True:
             print("你的输入有误！")
     except ValueError:
         print("你的输入有误！") 
-
-
-
 
 
 
