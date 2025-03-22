@@ -17,7 +17,7 @@ A simple number guessing game powered by Python3.
 0. Make sure you have Python3 installed on your system.<br/>
    (If not, you can visit the [Official Python Website](https://www.python.org/downloads/) or [Aliyun Mirror (For Chinese Users)](https://mirrors.aliyun.com/python-release/windows/) to download it.)
 1. Download the `numguess.py` file and save it in a folder.
-2. Prese `Win + R` to open the Run window.
+2. Press `Win + R` to open the Run window.
 3. Type `cmd` and press Enter.
 4. Navigate to the folder where you saved the `numguess.py` file using the `cd` command.<br/>
    Example: `cd C:\Users\"UserName"\Downloads`
